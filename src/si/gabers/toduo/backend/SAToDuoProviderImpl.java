@@ -39,6 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import si.gabers.toduo.MainActivity;
+import si.gabers.toduo.model.InterfaceAdapter;
+import si.gabers.toduo.model.ItemListInterface;
+import si.gabers.toduo.model.ItemRootElement;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -47,6 +50,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SAAgent;
 import com.samsung.android.sdk.accessory.SAPeerAgent;
@@ -264,7 +268,8 @@ public class SAToDuoProviderImpl extends SAAgent {
         Log.i(TAG, "incoming data on channel = " + channelId + ": from peer ="
                 + connectedPeerId);
         
-        sendListMsg(connectedPeerId, data);
+//        sendListMsg(connectedPeerId, data);
+        
 //        if (data.contains(Model.THUMBNAIL_LIST_RQST)) {
 //
 //            sendThumbnails(connectedPeerId, data);
@@ -274,6 +279,15 @@ public class SAToDuoProviderImpl extends SAAgent {
 //            Log.e(TAG, "onDataAvailableonChannel: Unknown jSon PDU received");
 //        }
 
+    	Gson gson = new GsonBuilder().registerTypeAdapter(ItemListInterface.class, new InterfaceAdapter<ItemListInterface>())
+                .create();
+    	ItemRootElement irt = new ItemRootElement();
+    	irt = (ItemRootElement) gson.fromJson(data, ItemRootElement.class);
+    	
+    	
+    	MainActivity.root = irt;
+    	
+//    	mImageListReceiverRegistered.onItemListReceived(irt);
     }
 
 
