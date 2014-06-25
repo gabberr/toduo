@@ -1,5 +1,6 @@
 	package si.gabers.toduo.model;
 
+import java.util.Iterator;
 import java.util.List;
 
 import si.gabers.toduo.R;
@@ -49,36 +50,50 @@ public class ItemArrayAdapter extends BaseAdapter {
     public void setTickedItem(int arg0, boolean value) {
          entries.get(arg0).setTicked(value);
     }
+    
+    public void removeItem(int id) {
+    	 entries.remove(id);
+    }
 
+	public void removeTicked() {
+
+		Iterator<ItemListInterface> i = entries.iterator();
+		while (i.hasNext()) {
+		   ItemListInterface s = i.next(); // must be called before you can call i.remove()
+		   if(s.isTicked())
+			   i.remove();
+		}
+	}
+    
     @Override
     public long getItemId(int arg0) {
         return arg0;
     }
-	  @Override
-		  public View getView(int position, View convertView, ViewGroup parent) {
-		    LayoutInflater inflater = (LayoutInflater) context
-			        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			    View rowView = inflater.inflate(R.layout.textitem_layout, parent, false);
-			    CheckBox chbox = (CheckBox) rowView.findViewById(R.id.checkBox1);
-			    chbox.setText(entries.get(position).toString());
-			    chbox.setChecked(entries.get(position).isTicked());
-			    
-		  if (entries.get(position).isImageItem() ) {
-		  
-		    rowView = inflater.inflate(R.layout.imageitem_layout, parent, false);
-		    chbox = (CheckBox) rowView.findViewById(R.id.checkBox1);
+    @Override
+	  public View getView(int position, View convertView, ViewGroup parent) {
+	    LayoutInflater inflater = (LayoutInflater) context
+		        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		    View rowView = inflater.inflate(R.layout.textitem_layout, parent, false);
+		    CheckBox chbox = (CheckBox) rowView.findViewById(R.id.checkBox1);
 		    chbox.setText(entries.get(position).toString());
 		    chbox.setChecked(entries.get(position).isTicked());
 		    
-		    ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-		    ImageItemList it = (ImageItemList) entries.get(position);
-		    
-		    imageView.setImageBitmap(it.getImage());
-		   
-		  }
-		  
-		    return rowView;
-		  }
+	  if (entries.get(position).isImageItem() ) {
+	  
+	    rowView = inflater.inflate(R.layout.imageitem_layout, parent, false);
+	    chbox = (CheckBox) rowView.findViewById(R.id.checkBox1);
+	    chbox.setText(entries.get(position).toString());
+	    chbox.setChecked(entries.get(position).isTicked());
+	    
+	    ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView1);
+	    ImageItemList it = (ImageItemList) entries.get(position);
+	    
+	    imageView.setImageBitmap(it.getImage());
+	   
+	  }
+	  
+	    return rowView;
+	  }
 	 
   }
 

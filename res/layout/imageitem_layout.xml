@@ -7,14 +7,22 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:maxHeight="100dp"
+        android:maxWidth="100dp"
+        android:minHeight="100dp"
+        android:minWidth="100dp"
+        android:paddingRight="10dp"
         android:src="@drawable/ic_launcher" />
     
     <CheckBox
-        android:focusable="false"
-        android:clickable="false"
         android:id="@+id/checkBox1"
         android:layout_width="fill_parent"
-        android:textSize="26sp"
-        android:layout_height="60dp" />
+        android:layout_height="match_parent"
+        android:button="@drawable/chechboxtoduo"
+        android:clickable="false"
+        android:drawablePadding="-20dp"
+        android:focusable="false"
+        android:paddingLeft="10dp"
+        android:textSize="28dp" />
 
 </LinearLayout> 
