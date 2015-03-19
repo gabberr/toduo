@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import si.gabers.toduo.MainActivity;
+import si.gabers.toduo.activity.MainActivity;
 import si.gabers.toduo.model.InterfaceAdapter;
 import si.gabers.toduo.model.ItemListInterface;
 import si.gabers.toduo.model.ItemRootElement;
@@ -236,7 +236,7 @@ public class SAToDuoProviderImpl extends SAAgent {
 
 				.show();
 
-				Intent myIntent = new Intent(getBaseContext(),
+				Intent myIntent = new Intent(getApplicationContext(),
 						MainActivity.class);
 				myIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 						| Intent.FLAG_ACTIVITY_SINGLE_TOP);

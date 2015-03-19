@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="AndroidClient">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../AndroidClient" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../AndroidClient/gen" />
+      <root url="file://$PROJECT_DIR$/../AndroidClient/src" />
+    </SOURCES>
+  </library>
+</component>

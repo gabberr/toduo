@@ -1,7 +1,8 @@
-package si.gabers.toduo;
+package si.gabers.toduo.activity;
 
 import java.util.ArrayList;
 
+import si.gabers.toduo.R;
 import si.gabers.toduo.backend.SAToDuoProviderImpl;
 import si.gabers.toduo.backend.SAToDuoProviderImpl.LocalBinder;
 import si.gabers.toduo.model.ImageItemList;
@@ -23,23 +24,27 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import at.fhooe.automate.logger.android.services.workflow.Workflow;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends ListActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
+
 		super.onDestroy();
 		unbindService(mConnection);
 		mConnection = null;
 	}
 
-	// public static ArrayList<MainItemListModel> items;
+	// public static ArrayLwist<MainItemListModel> items;
 	public static ItemRootElement root;
 	public static boolean active = false;
 	public static int peerId = 0;
@@ -56,12 +61,28 @@ public class MainActivity extends ListActivity {
 		if (!mBound) {
 			bindService(intent, mConnection, BIND_AUTO_CREATE);
 		}
+
 	}
 
 	@Override
 	public void onStop() {
-		super.onStop();
 		active = false;
+		super.onStop();
+
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+
+		super.onResume();
+		Workflow.prepareAndCommitState("MainActivity", "MainActivity");
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
 	}
 
 	@Override
@@ -123,12 +144,15 @@ public class MainActivity extends ListActivity {
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		// String item = (String) getListAdapter().getItem(position);
-		Intent intent = new Intent(this, ItemList.class);
+
+		Context context = this.getApplicationContext();
+		Intent intent = new Intent(context, ItemList.class);
 
 		Bundle b = new Bundle();
 		b.putLong("id", id);
 		intent.putExtras(b);
-		startActivity(intent);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		(context).startActivity(intent);
 
 	}
 
@@ -148,6 +172,11 @@ public class MainActivity extends ListActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_sync) {
 
+			Button button = new Button(this);
+			button.setText("Sync");
+			button.setId(R.id.sync);
+			onClick(button);
+
 			Gson gson = new GsonBuilder()
 					.registerTypeAdapter(ItemListInterface.class,
 							new InterfaceAdapter<ItemListInterface>())
@@ -159,6 +188,11 @@ public class MainActivity extends ListActivity {
 		}
 		if (id == R.id.action_add_new) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			Button button = new Button(this);
+			button.setText("AddList");
+			button.setId(R.id.addList);
+			onClick(button);
 
 			LinearLayout ll = new LinearLayout(this);
 			ll.setOrientation(1);
@@ -207,4 +241,10 @@ public class MainActivity extends ListActivity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		System.out.println(" view" + v.getId());
+
+	}
 }

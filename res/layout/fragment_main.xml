@@ -8,10 +8,31 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="si.gabers.toduo.MainActivity$PlaceholderFragment" >
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:id="@+id/addList"
+        android:visibility="invisible" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/clearItems"
+        android:visibility="invisible" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addItem"
+        android:visibility="invisible" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sync"
+        android:visibility="invisible" />
+     <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/renameItem"
+        android:visibility="invisible" />
     <ListView
     android:id="@+id/listview"
     android:layout_width="wrap_content"

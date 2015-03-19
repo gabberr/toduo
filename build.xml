@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="ToDuo">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../../Android/eclipse"/>
+    <property name="ToDuoTest.location" value="../ToDuoTest"/>
+    <property name="ToDuoWatch.location" value="../ToDuoWatch"/>
+    <property name="LoggingKernel.location" value="../LoggingKernel"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="Android 4.4.2.libraryclasspath">
+        <pathelement location="../../../Android/sdk/platforms/android-19/android.jar"/>
+    </path>
+    <path id="Android Private Libraries.libraryclasspath">
+        <pathelement location="../../../../../LoggingKernel"/>
+        <pathelement location="libs/accessory-v1.0.0.jar"/>
+        <pathelement location="../AndroidClient/libs/gson-1.7.1.jar"/>
+        <pathelement location="libs/sdk-v1.0.0.jar"/>
+        <pathelement location="../AndroidClient/libs/libthrift-0.7.0.jar"/>
+        <pathelement location="../AndroidClient/libs/slf4j-api-1.5.8.jar"/>
+        <pathelement location="../AndroidClient/libs/thriftassets.jar"/>
+        <pathelement location="../AndroidClient/libs/slf4j-log4j12-1.5.8.jar"/>
+        <pathelement location="libs/android-support-v4.jar"/>
+        <pathelement location="../AndroidClient/libs/log4j-1.2.14.jar"/>
+    </path>
+    <path id="Android Dependencies.libraryclasspath">
+        <pathelement location="../AndroidClient/bin/androidclient.jar"/>
+    </path>
+    <path id="AspectJ Runtime Library.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.aspectj.runtime_1.7.3.20130613144500-a.jar"/>
+    </path>
+    <path id="LoggingKernel.classpath">
+        <pathelement location="${LoggingKernel.location}/bin"/>
+    </path>
+    <path id="ToDuo.classpath">
+        <pathelement location="bin/classes"/>
+        <path refid="Android 4.4.2.libraryclasspath"/>
+        <path refid="Android Private Libraries.libraryclasspath"/>
+        <path refid="Android Dependencies.libraryclasspath"/>
+        <path refid="AspectJ Runtime Library.libraryclasspath"/>
+        <path refid="LoggingKernel.classpath"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin/classes"/>
+        <copy includeemptydirs="false" todir="bin/classes">
+            <fileset dir="src">
+                <exclude name="**/*.ucls"/>
+                <exclude name="**/*.useq"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin/classes">
+            <fileset dir="gen">
+                <exclude name="**/*.ucls"/>
+                <exclude name="**/*.useq"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin/classes"/>
+    </target>
+    <target depends="clean" name="cleanall">
+        <ant antfile="build1.xml" dir="${LoggingKernel.location}" inheritAll="false" target="clean"/>
+    </target>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects">
+        <ant antfile="build1.xml" dir="${LoggingKernel.location}" inheritAll="false" target="build-project">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin/classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="gen"/>
+            <classpath refid="ToDuo.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects">
+        <ant antfile="build1.xml" dir="${ToDuoTest.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build1.xml" dir="${ToDuoTest.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+        <ant antfile="build1.xml" dir="${ToDuoWatch.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build1.xml" dir="${ToDuoWatch.location}" inheritAll="false" target="build">
+            <propertyset>
+                <propertyref name="build.compiler"/>
+            </propertyset>
+        </ant>
+    </target>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+</project>

@@ -15,7 +15,7 @@
         android:src="@drawable/ic_launcher" />
     
     <CheckBox
-        android:id="@+id/checkBox1"
+        android:id="@+id/checkBoxItem"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:button="@drawable/chechboxtoduo"

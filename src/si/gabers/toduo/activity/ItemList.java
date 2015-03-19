@@ -1,5 +1,6 @@
-package si.gabers.toduo;
+package si.gabers.toduo.activity;
 
+import si.gabers.toduo.R;
 import si.gabers.toduo.model.ImageItemList;
 import si.gabers.toduo.model.ItemArrayAdapter;
 import si.gabers.toduo.model.MainItemListModel;
@@ -11,17 +12,46 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import at.fhooe.automate.logger.android.services.workflow.Workflow;
 
 public class ItemList extends ListActivity implements OnItemLongClickListener,
-		OnItemClickListener {
+		OnItemClickListener, OnClickListener, OnLongClickListener {
 	MainItemListModel ml;
 	static final int UPDATE_LIST = 333;
+
+	@Override
+	public void onStart() {
+		super.onStart();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+
+		super.onResume();
+		Workflow.prepareAndCommitState("OpenListActivity", "OpenListActivity");
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
 
 	@Override
 	public void onCreate(Bundle _bundle) {
@@ -41,6 +71,7 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 		this.getListView().setLongClickable(true);
 		this.getListView().setOnItemClickListener(this);
 		this.getListView().setOnItemLongClickListener(this);
+
 	}
 
 	@Override
@@ -53,7 +84,9 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 
 		// Set an EditText view to get user input
 		final EditText input = new EditText(this);
-		CheckBox chbox = (CheckBox) v.findViewById(R.id.checkBox1);
+		CheckBox chbox = (CheckBox) v.findViewById(R.id.checkBoxItem);
+
+		onLongClick(chbox);
 
 		input.setText(chbox.getText());
 
@@ -95,7 +128,7 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 
 		alert.show();
 
-		return false;
+		return true;
 
 	}
 
@@ -115,7 +148,12 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 		int id = item.getItemId();
 		if (id == R.id.action_add_new) {
 
+			Button button = new Button(this);
+			button.setText("AddItem");
+			button.setId(R.id.addItem);
+
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			onClick(button);
 
 			alert.setTitle("Item name");
 			// alert.setMessage("Message");
@@ -168,7 +206,10 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 		}
 
 		if (id == R.id.action_remove_ticked) {
-
+			Button button = new Button(this);
+			button.setText("RemoveTicked");
+			button.setId(R.id.clearItems);
+			onClick(button);
 			ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
 			adapter.removeTicked();
 			adapter.notifyDataSetChanged();
@@ -179,12 +220,28 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View v, int arg2, long id) {
-		CheckBox chbox = (CheckBox) v.findViewById(R.id.checkBox1);
+		CheckBox chbox = (CheckBox) v.findViewById(R.id.checkBoxItem);
 		chbox.toggle();
 		boolean value = chbox.isChecked();
 		ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
 		adapter.setTickedItem(arg2, value);
+		onClick(chbox);
 
+	}
+
+	/**
+	 * For automate framework injection
+	 */
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public boolean onLongClick(View v) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
