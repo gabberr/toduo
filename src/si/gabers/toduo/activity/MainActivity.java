@@ -3,9 +3,10 @@ package si.gabers.toduo.activity;
 import java.util.ArrayList;
 
 import si.gabers.toduo.R;
+import si.gabers.toduo.backend.BluetoothPacketReceiver;
+import si.gabers.toduo.backend.BluetoothPacketReceiver.LocalBinderAutomate;
 import si.gabers.toduo.backend.SAToDuoProviderImpl;
 import si.gabers.toduo.backend.SAToDuoProviderImpl.LocalBinder;
-import si.gabers.toduo.model.ImageItemList;
 import si.gabers.toduo.model.InterfaceAdapter;
 import si.gabers.toduo.model.ItemListInterface;
 import si.gabers.toduo.model.ItemRootElement;
@@ -36,17 +37,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class MainActivity extends ListActivity implements OnClickListener {
-	@Override
-	protected void onDestroy() {
-
-		super.onDestroy();
-		unbindService(mConnection);
-		mConnection = null;
-	}
 
 	// public static ArrayLwist<MainItemListModel> items;
 	public static ItemRootElement root;
-	public static boolean active = false;
+
 	public static int peerId = 0;
 
 	// SAToDuoProviderImpl mBackendService = null;
@@ -62,11 +56,27 @@ public class MainActivity extends ListActivity implements OnClickListener {
 			bindService(intent, mConnection, BIND_AUTO_CREATE);
 		}
 
+		Intent intentAutomate = new Intent(this, BluetoothPacketReceiver.class);
+		bindService(intentAutomate, mConnectionAutomate,
+				Context.BIND_AUTO_CREATE);
+		if (!mBoundAutomate) {
+			bindService(intentAutomate, mConnectionAutomate, BIND_AUTO_CREATE);
+		}
+
+	}
+
+	@Override
+	protected void onDestroy() {
+
+		super.onDestroy();
+		unbindService(mConnection);
+		mConnection = null;
+		unbindService(mConnectionAutomate);
+		mConnectionAutomate = null;
 	}
 
 	@Override
 	public void onStop() {
-		active = false;
 		super.onStop();
 
 	}
@@ -106,15 +116,15 @@ public class MainActivity extends ListActivity implements OnClickListener {
 		list2.addItem(new TextItemList("Barcelona"));
 		list2.addItem(new TextItemList("Rome"));
 
-		MainItemListModel list3 = new MainItemListModel("Groceries");
-		list3.addItem(new ImageItemList("Ketchup"));
-		list3.addItem(new ImageItemList("Soap"));
-		list3.addItem(new ImageItemList("Kinder bueno"));
-		list3.addItem(new ImageItemList("Lemons"));
+		// MainItemListModel list3 = new MainItemListModel("Groceries");
+		// list3.addItem(new ImageItemList("Ketchup"));
+		// list3.addItem(new ImageItemList("Soap"));
+		// list3.addItem(new ImageItemList("Kinder bueno"));
+		// list3.addItem(new ImageItemList("Lemons"));
 
 		root.items.add(list1);
 		root.items.add(list2);
-		root.items.add(list3);
+		// root.items.add(list3);
 
 		MainItemListAdapter Ad = new MainItemListAdapter(this,
 				android.R.layout.simple_list_item_1, root.items);
@@ -138,6 +148,24 @@ public class MainActivity extends ListActivity implements OnClickListener {
 		public void onServiceDisconnected(ComponentName className) {
 			mService = null;
 			mBound = false;
+		}
+	};
+
+	private boolean mBoundAutomate = false;
+	private BluetoothPacketReceiver mServiceAutomate;
+
+	private ServiceConnection mConnectionAutomate = new ServiceConnection() {
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			LocalBinderAutomate binder = (LocalBinderAutomate) service;
+			mServiceAutomate = binder.getService();
+			mBoundAutomate = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName className) {
+			mServiceAutomate = null;
+			mBoundAutomate = false;
 		}
 	};
 

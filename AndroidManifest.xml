@@ -23,11 +23,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        
+        android:theme="@style/AppTheme" >       
         <service android:name="si.gabers.toduo.backend.SAToDuoProviderImpl" />
-        
-        
+        <service android:name="si.gabers.toduo.backend.BluetoothPacketReceiver" />
+ 
         <service
             android:name="at.fhooe.automate.logger.android.services.useractivity.UserActivityRecognitionIntentService"
             android:exported="false" >

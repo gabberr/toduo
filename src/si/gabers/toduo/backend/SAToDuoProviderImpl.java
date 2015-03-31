@@ -43,7 +43,6 @@ import si.gabers.toduo.model.ItemRootElement;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -59,10 +58,10 @@ public class SAToDuoProviderImpl extends SAAgent {
 	public static final String TAG = "SAToDuoProviderService";
 
 	private SA mAccessory;
-	String[] mProjection = { MediaStore.Images.Media._ID,
-			MediaStore.Images.Media.DATA, MediaStore.Images.Media.SIZE,
-			MediaStore.Images.Media.DISPLAY_NAME,
-			MediaStore.Images.Media.WIDTH, MediaStore.Images.Media.HEIGHT };
+	// String[] mProjection = { MediaStore.Images.Media._ID,
+	// MediaStore.Images.Media.DATA, MediaStore.Images.Media.SIZE,
+	// MediaStore.Images.Media.DISPLAY_NAME,
+	// MediaStore.Images.Media.WIDTH, MediaStore.Images.Media.HEIGHT };
 
 	HashMap<Integer, SAToDuoProviderConnection> mConnectionsMap = null;
 
@@ -71,8 +70,8 @@ public class SAToDuoProviderImpl extends SAAgent {
 
 	// Keeps track of all current registered clients.
 	// ArrayList<Messenger> mClients = new ArrayList<Messenger>();
-	List<String> mTb = new ArrayList<String>();
-	String mImgData = "";
+	// List<String> mTb = new ArrayList<String>();
+	// String mImgData = "";
 	// int mValue = 0; // Holds last value set by a client.
 
 	public static final String ACTION_ADD_DEVICE = "android.appcessory.device.ADD_DEVICE";

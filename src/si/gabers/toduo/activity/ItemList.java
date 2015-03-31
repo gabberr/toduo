@@ -1,7 +1,6 @@
 package si.gabers.toduo.activity;
 
 import si.gabers.toduo.R;
-import si.gabers.toduo.model.ImageItemList;
 import si.gabers.toduo.model.ItemArrayAdapter;
 import si.gabers.toduo.model.MainItemListModel;
 import si.gabers.toduo.model.TextItemList;
@@ -99,11 +98,11 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 				String value = input.getText().toString();
 
 				ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
-				boolean isImage = adapter.getItem(idd).isImageItem();
-				if (isImage)
-					adapter.setItem(idd, new ImageItemList(value, adapter));
-				else
-					adapter.setItem(idd, new TextItemList(value));
+				// boolean isImage = adapter.getItem(idd).isImageItem();
+				// if (isImage)
+				// adapter.setItem(idd, new ImageItemList(value, adapter));
+				// else
+				adapter.setItem(idd, new TextItemList(value));
 				adapter.notifyDataSetChanged();
 
 			}
@@ -181,10 +180,8 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 							ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
 
 							boolean isImage = checkBox.isChecked();
-							if (isImage)
-								adapter.add(new ImageItemList(value, adapter));
-							else
-								adapter.add(new TextItemList(value));
+
+							adapter.add(new TextItemList(value));
 
 							adapter.notifyDataSetChanged();
 							// Do something with value!
