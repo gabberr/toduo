@@ -3,6 +3,11 @@
 
     <string name="app_name">ToDuo</string>
      <string name="list_name">List name</string>
+     <string name="item_name">Item name</string>
+     <string name="item_description">Item description</string>
+     <string  name="is_image_item"> Is Image item?</string>
+    <string name="add_item">Add item</string>
+        <string name="cancel">Cancel</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_add_new">Add</string>

@@ -1,16 +1,26 @@
 package si.gabers.toduo.backend;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import si.gabers.toduo.activity.MainActivity;
+import si.gabers.toduo.model.InterfaceAdapter;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
+import at.fhooe.automate.logger.android.event.GenericPacketWrapperEvent;
+import at.fhooe.automate.logger.android.network.GenericPacket;
+import at.fhooe.automate.logger.base.action.EventAction;
+import at.fhooe.automate.logger.base.event.Event;
+import at.fhooe.automate.logger.base.kernel.KernelBase;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 import com.samsung.android.sdk.SsdkUnsupportedException;
 import com.samsung.android.sdk.accessory.SA;
 import com.samsung.android.sdk.accessory.SAAgent;
@@ -215,7 +225,7 @@ public class BluetoothPacketReceiver extends SAAgent {
 	 * @param data
 	 */
 	private void onDataAvailableonChannel(String connectedPeerId,
-			long channelId, String data) {
+			long channelId, GenericPacket data) {
 
 		Log.i(TAG, "incoming data AUTOmaTe on channel = " + channelId
 				+ ": from peer =" + connectedPeerId);
@@ -230,9 +240,16 @@ public class BluetoothPacketReceiver extends SAAgent {
 		// } else {
 		// Log.e(TAG, "onDataAvailableonChannel: Unknown jSon PDU received");
 		// }
+		Toast.makeText(getApplicationContext(),
+				"automate data received:" + data.toString(), Toast.LENGTH_LONG)
+				.show();
+		// Log.d(TAG, data);
 
-		Log.d(TAG, data);
+		GenericPacket gp = data;
 
+		GenericPacketWrapperEvent gpevent = new GenericPacketWrapperEvent(gp);
+
+		new EventAction(KernelBase.getKernel(), gpevent).execute();
 		// Gson gson = new GsonBuilder().registerTypeAdapter(
 		// ItemListInterface.class,
 		// new InterfaceAdapter<ItemListInterface>()).create();
@@ -264,10 +281,52 @@ public class BluetoothPacketReceiver extends SAAgent {
 		 */
 		@Override
 		public void onReceive(int channelId, byte[] data) {
+
 			Log.i(TAG, "onReceive ENTER channel = " + channelId);
-			final String strToUpdateUI = new String(data);
+
+			// GenericPacket receivedPacket = null;
+			// ByteArrayInputStream bis = new ByteArrayInputStream(data);
+			// ObjectInput in = null;
+			// try {
+			// in = new ObjectInputStream(bis);
+			// Object o = in.readObject();
+			// receivedPacket = (GenericPacket) o;
+			// } catch (StreamCorruptedException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// } catch (IOException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// } catch (ClassNotFoundException e) {
+			// // TODO Auto-generated catch block
+			// e.printStackTrace();
+			// } finally {
+			// try {
+			// bis.close();
+			// } catch (IOException ex) {
+			// // ignore close exception
+			// }
+			// try {
+			// if (in != null) {
+			// in.close();
+			// }
+			// } catch (IOException ex) {
+			// // ignore close exception
+			// }
+			// }
+
+			final String jsonString = new String(data);
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.registerTypeAdapter(Event.class,
+					new InterfaceAdapter<GenericPacket>());
+
+			Gson gson = gsonBuilder.create();
+			GenericPacket receivedPacket = gson.fromJson(jsonString,
+					GenericPacket.class);
+
+			// final String strToUpdateUI = new String(data);
 			onDataAvailableonChannel(String.valueOf(mConnectionId), channelId, // getRemotePeerId()
-					strToUpdateUI);
+					receivedPacket);
 
 		}
 
@@ -300,6 +359,16 @@ public class BluetoothPacketReceiver extends SAAgent {
 			if (mConnectionsMap != null) {
 				mConnectionsMap.remove(mConnectionId);
 
+			}
+
+		}
+
+		public class EventInstanceCreator implements InstanceCreator<Event> {
+
+			@Override
+			public Event createInstance(Type arg0) {
+				// TODO Auto-generated method stub
+				return null;
 			}
 
 		}

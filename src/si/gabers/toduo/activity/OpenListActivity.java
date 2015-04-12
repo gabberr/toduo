@@ -2,11 +2,14 @@ package si.gabers.toduo.activity;
 
 import si.gabers.toduo.R;
 import si.gabers.toduo.model.ItemArrayAdapter;
-import si.gabers.toduo.model.MainItemListModel;
-import si.gabers.toduo.model.TextItemList;
+import si.gabers.toduodata.model.ImageItem;
+import si.gabers.toduodata.model.MainActivityItemList;
+import si.gabers.toduodata.model.TextItem;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,12 +22,12 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import at.fhooe.automate.logger.android.services.workflow.Workflow;
 
-public class ItemList extends ListActivity implements OnItemLongClickListener,
-		OnItemClickListener, OnClickListener, OnLongClickListener {
-	MainItemListModel ml;
+public class OpenListActivity extends ListActivity implements
+		OnItemLongClickListener, OnItemClickListener, OnClickListener,
+		OnLongClickListener {
+	MainActivityItemList ml;
 	static final int UPDATE_LIST = 333;
 
 	@Override
@@ -98,11 +101,11 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 				String value = input.getText().toString();
 
 				ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
-				// boolean isImage = adapter.getItem(idd).isImageItem();
-				// if (isImage)
-				// adapter.setItem(idd, new ImageItemList(value, adapter));
-				// else
-				adapter.setItem(idd, new TextItemList(value));
+				boolean isImage = adapter.getItem(idd).isImageItem();
+				if (isImage)
+					adapter.setItem(idd, new ImageItem(value, adapter));
+				else
+					adapter.setItem(idd, new TextItem(value));
 				adapter.notifyDataSetChanged();
 
 			}
@@ -147,57 +150,61 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 		int id = item.getItemId();
 		if (id == R.id.action_add_new) {
 
-			Button button = new Button(this);
-			button.setText("AddItem");
-			button.setId(R.id.addItem);
+			Context context = this.getApplicationContext();
+			Intent intent = new Intent(context, AddItemActivity.class);
+			startActivityForResult(intent, 0);
 
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			onClick(button);
-
-			alert.setTitle("Item name");
-			// alert.setMessage("Message");
-
-			// Set an EditText view to get user input
-			final EditText input = new EditText(this);
-			final CheckBox checkBox = new CheckBox(this);
-
-			input.setText("");
-			checkBox.setText("Get image");
-
-			LinearLayout linearLayout = new LinearLayout(this);
-			linearLayout.setOrientation(1);
-			linearLayout.addView(input);
-			linearLayout.addView(checkBox);
-			alert.setView(linearLayout);
-
-			alert.setPositiveButton("Ok",
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							String value = input.getText().toString();
-
-							ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
-
-							boolean isImage = checkBox.isChecked();
-
-							adapter.add(new TextItemList(value));
-
-							adapter.notifyDataSetChanged();
-							// Do something with value!
-						}
-					});
-
-			alert.setNegativeButton("Cancel",
-					new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							// Canceled.
-						}
-					});
-
-			alert.show();
+			// Button button = new Button(this);
+			// button.setText("AddItem");
+			// button.setId(R.id.addItem);
+			//
+			// AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			// onClick(button);
+			//
+			// alert.setTitle("Item name");
+			// // alert.setMessage("Message");
+			//
+			// // Set an EditText view to get user input
+			// final EditText input = new EditText(this);
+			// final CheckBox checkBox = new CheckBox(this);
+			//
+			// input.setText("");
+			// checkBox.setText("Get image");
+			//
+			// LinearLayout linearLayout = new LinearLayout(this);
+			// linearLayout.setOrientation(1);
+			// linearLayout.addView(input);
+			// linearLayout.addView(checkBox);
+			// alert.setView(linearLayout);
+			//
+			// alert.setPositiveButton("Ok",
+			// new DialogInterface.OnClickListener() {
+			// @Override
+			// public void onClick(DialogInterface dialog,
+			// int whichButton) {
+			// String value = input.getText().toString();
+			//
+			// ItemArrayAdapter adapter = (ItemArrayAdapter) getListAdapter();
+			//
+			// boolean isImage = checkBox.isChecked();
+			//
+			// adapter.add(new TextItem(value));
+			//
+			// adapter.notifyDataSetChanged();
+			// // Do something with value!
+			// }
+			// });
+			//
+			// alert.setNegativeButton("Cancel",
+			// new DialogInterface.OnClickListener() {
+			// @Override
+			// public void onClick(DialogInterface dialog,
+			// int whichButton) {
+			// // Canceled.
+			// }
+			// });
+			//
+			// alert.show();
 
 			return true;
 		}
@@ -224,6 +231,13 @@ public class ItemList extends ListActivity implements OnItemLongClickListener,
 		adapter.setTickedItem(arg2, value);
 		onClick(chbox);
 
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**

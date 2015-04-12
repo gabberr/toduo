@@ -5,13 +5,14 @@
 
     <CheckBox
         android:id="@+id/checkBoxItem"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:button="@drawable/chechboxtoduo"
         android:clickable="false"
         android:drawablePadding="-20dp"
         android:focusable="false"
         android:paddingLeft="10dp"
-        android:textSize="28dp" />
+        android:paddingRight="10dp"
+        android:textSize="28sp" />
 
 </LinearLayout> 

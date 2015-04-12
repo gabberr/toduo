@@ -38,8 +38,8 @@ import java.util.List;
 
 import si.gabers.toduo.activity.MainActivity;
 import si.gabers.toduo.model.InterfaceAdapter;
-import si.gabers.toduo.model.ItemListInterface;
-import si.gabers.toduo.model.ItemRootElement;
+import si.gabers.toduodata.model.ItemIF;
+import si.gabers.toduodata.model.ItemRootElement;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -272,9 +272,8 @@ public class SAToDuoProviderImpl extends SAAgent {
 		// Log.e(TAG, "onDataAvailableonChannel: Unknown jSon PDU received");
 		// }
 
-		Gson gson = new GsonBuilder().registerTypeAdapter(
-				ItemListInterface.class,
-				new InterfaceAdapter<ItemListInterface>()).create();
+		Gson gson = new GsonBuilder().registerTypeAdapter(ItemIF.class,
+				new InterfaceAdapter<ItemIF>()).create();
 		ItemRootElement irt = new ItemRootElement();
 		irt = gson.fromJson(data, ItemRootElement.class);
 
@@ -309,6 +308,9 @@ public class SAToDuoProviderImpl extends SAAgent {
 				uHandler.send(GALLERY_CHANNEL_ID, data.getBytes());
 			} catch (final IOException e) {
 				Log.e(TAG, "I/O Error occured while send");
+				e.printStackTrace();
+			} catch (final Exception e) {
+				Log.e(TAG, "Exception raised:");
 				e.printStackTrace();
 			}
 		}

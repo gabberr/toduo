@@ -55,14 +55,20 @@
         </activity>
   
         <activity
-            android:name="si.gabers.toduo.activity.ItemList"
+            android:name="si.gabers.toduo.activity.OpenListActivity"
             android:label="@string/list_name" >
             <intent-filter>
-              <!--   <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" /> -->
             </intent-filter>
         </activity>
+        
+    	<activity
+            android:name="si.gabers.toduo.activity.AddItemActivity"
+            android:label="@string/add_item" >
+            <intent-filter>
+            </intent-filter>
+        </activity>
+        
+        
         <meta-data android:name="AccessoryServicesLocation" android:value="/res/xml/accessoryservices.xml"/>
         <meta-data android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />

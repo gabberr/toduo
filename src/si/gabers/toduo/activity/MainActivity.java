@@ -7,12 +7,12 @@ import si.gabers.toduo.backend.BluetoothPacketReceiver;
 import si.gabers.toduo.backend.BluetoothPacketReceiver.LocalBinderAutomate;
 import si.gabers.toduo.backend.SAToDuoProviderImpl;
 import si.gabers.toduo.backend.SAToDuoProviderImpl.LocalBinder;
-import si.gabers.toduo.model.InterfaceAdapter;
-import si.gabers.toduo.model.ItemListInterface;
-import si.gabers.toduo.model.ItemRootElement;
-import si.gabers.toduo.model.MainItemListAdapter;
-import si.gabers.toduo.model.MainItemListModel;
-import si.gabers.toduo.model.TextItemList;
+import si.gabers.toduodata.model.ImageItem;
+import si.gabers.toduodata.model.InterfaceAdapter;
+import si.gabers.toduodata.model.ItemIF;
+import si.gabers.toduodata.model.ItemRootElement;
+import si.gabers.toduodata.model.MainActivityItemList;
+import si.gabers.toduodata.model.TextItem;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.ComponentName;
@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -106,27 +107,30 @@ public class MainActivity extends ListActivity implements OnClickListener {
 		// }
 
 		root = new ItemRootElement();
-		root.items = new ArrayList<MainItemListModel>();
+		root.items = new ArrayList<MainActivityItemList>();
 
-		MainItemListModel list1 = new MainItemListModel("Today");
-		list1.addItem(new TextItemList("Call Anna"));
-		list1.addItem(new TextItemList("Send email to Frank"));
+		MainActivityItemList list1 = new MainActivityItemList("Today");
+		list1.addItem(new TextItem("Call Anna"));
+		list1.addItem(new TextItem("Send email to Frank"));
 
-		MainItemListModel list2 = new MainItemListModel("Places to visit");
-		list2.addItem(new TextItemList("Barcelona"));
-		list2.addItem(new TextItemList("Rome"));
+		MainActivityItemList list2 = new MainActivityItemList("Places to visit");
+		list2.addItem(new TextItem("Barcelona"));
+		list2.addItem(new TextItem("Rome"));
 
-		// MainItemListModel list3 = new MainItemListModel("Groceries");
-		// list3.addItem(new ImageItemList("Ketchup"));
-		// list3.addItem(new ImageItemList("Soap"));
-		// list3.addItem(new ImageItemList("Kinder bueno"));
-		// list3.addItem(new ImageItemList("Lemons"));
+		MainActivityItemList list3 = new MainActivityItemList("Groceries");
+		list3.addItem(new ImageItem("Ketchup"));
+		list3.addItem(new ImageItem("Soap"));
+		list3.addItem(new ImageItem("Kinder bueno"));
+		list3.addItem(new ImageItem("Lemons"));
 
 		root.items.add(list1);
 		root.items.add(list2);
-		// root.items.add(list3);
+		root.items.add(list3);
 
-		MainItemListAdapter Ad = new MainItemListAdapter(this,
+		// MainItemListAdapter Ad = new MainItemListAdapter(this,
+		// android.R.layout.simple_list_item_1, root.items);
+
+		ArrayAdapter Ad = new ArrayAdapter<MainActivityItemList>(this,
 				android.R.layout.simple_list_item_1, root.items);
 
 		setListAdapter(Ad);
@@ -174,7 +178,7 @@ public class MainActivity extends ListActivity implements OnClickListener {
 		// String item = (String) getListAdapter().getItem(position);
 
 		Context context = this.getApplicationContext();
-		Intent intent = new Intent(context, ItemList.class);
+		Intent intent = new Intent(context, OpenListActivity.class);
 
 		Bundle b = new Bundle();
 		b.putLong("id", id);
@@ -206,8 +210,8 @@ public class MainActivity extends ListActivity implements OnClickListener {
 			onClick(button);
 
 			Gson gson = new GsonBuilder()
-					.registerTypeAdapter(ItemListInterface.class,
-							new InterfaceAdapter<ItemListInterface>())
+					.registerTypeAdapter(ItemIF.class,
+							new InterfaceAdapter<ItemIF>())
 					.excludeFieldsWithoutExposeAnnotation().create();
 
 			String json = gson.toJson(root).toString();
@@ -246,7 +250,7 @@ public class MainActivity extends ListActivity implements OnClickListener {
 								int whichButton) {
 							String value = input.getText().toString();
 
-							MainItemListModel list = new MainItemListModel(
+							MainActivityItemList list = new MainActivityItemList(
 									value);
 							root.items.add(list);
 							// getListAdapter().notifyDataSetChanged();

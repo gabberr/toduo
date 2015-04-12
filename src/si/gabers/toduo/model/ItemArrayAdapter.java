@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import si.gabers.toduo.R;
+import si.gabers.toduodata.model.ImageItem;
+import si.gabers.toduodata.model.ItemIF;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +17,11 @@ import android.widget.ImageView;
 public class ItemArrayAdapter extends BaseAdapter {
 
 	private final Context context;
-	private final List<ItemListInterface> entries;
+	private final List<ItemIF> entries;
 
 	ImageView imageView;
 
-	public void add(ItemListInterface item) {
+	public void add(ItemIF item) {
 		if (entries.contains(item))
 			return;
 		entries.add(item);
@@ -31,18 +33,18 @@ public class ItemArrayAdapter extends BaseAdapter {
 		return entries.size();
 	}
 
-	public ItemArrayAdapter(Context context, List<ItemListInterface> entries) {
+	public ItemArrayAdapter(Context context, List<ItemIF> entries) {
 
 		this.context = context;
 		this.entries = entries;
 	}
 
 	@Override
-	public ItemListInterface getItem(int arg0) {
+	public ItemIF getItem(int arg0) {
 		return entries.get(arg0);
 	}
 
-	public void setItem(long id, ItemListInterface item) {
+	public void setItem(long id, ItemIF item) {
 		entries.set((int) id, item);
 	}
 
@@ -56,10 +58,10 @@ public class ItemArrayAdapter extends BaseAdapter {
 
 	public void removeTicked() {
 
-		Iterator<ItemListInterface> i = entries.iterator();
+		Iterator<ItemIF> i = entries.iterator();
 		while (i.hasNext()) {
-			ItemListInterface s = i.next(); // must be called before you can
-											// call i.remove()
+			ItemIF s = i.next(); // must be called before you can
+									// call i.remove()
 			if (s.isTicked())
 				i.remove();
 		}
@@ -89,7 +91,7 @@ public class ItemArrayAdapter extends BaseAdapter {
 			chbox.setChecked(entries.get(position).isTicked());
 
 			imageView = (ImageView) rowView.findViewById(R.id.imageView1);
-			ImageItemList it = (ImageItemList) entries.get(position);
+			ImageItem it = (ImageItem) entries.get(position);
 
 			imageView.setImageBitmap(it.getImage());
 			imageView.invalidate();

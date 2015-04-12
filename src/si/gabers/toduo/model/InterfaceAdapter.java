@@ -1,5 +1,9 @@
 package si.gabers.toduo.model;
 
+/**
+ * Used for proper conversion of objects to and fromgson
+ */
+
 import java.lang.reflect.Type;
 
 import com.google.gson.JsonDeserializationContext;
